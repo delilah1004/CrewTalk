@@ -1,11 +1,14 @@
-import React from "react";
-import { StyleSheet } from "react-native";
-import { Container } from "native-base";
+import React from 'react';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
+import { StyleSheet } from 'react-native';
+import { Container, View, Text } from 'native-base';
 
 export default function SignIn() {
   return (
     <Container style={styles.container}>
-
+      <View style={styles.content}>
+        <Text>SignIn Page 입니다</Text>
+      </View>
     </Container>
   );
 }
@@ -13,7 +16,10 @@ export default function SignIn() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignSelf: "center",
+    marginTop: getStatusBarHeight(),
+    justifyContent: 'center',
+  },
+  content: {
+    alignItems: 'center',
   },
 });
