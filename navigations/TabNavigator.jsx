@@ -1,10 +1,10 @@
-import React from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import React from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import Platform from "react-native";
-import { Foundation, Ionicons, FontAwesome } from "@expo/vector-icons";
+import Platform from 'react-native';
+import { Foundation, Ionicons, FontAwesome } from '@expo/vector-icons';
 
-import 파일명 from "파일경로";
+import Main from '../pages/article/Main';
 
 const Tabs = createBottomTabNavigator();
 
@@ -13,41 +13,41 @@ const TabNavigator = () => {
     <Tabs.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused }) => {
-          let iconName = Platform.OS === "ios" ? "ios-" : "md-";
-          let iconKind = "";
+          let iconName = Platform.OS === 'ios' ? 'ios-' : 'md-';
+          let iconKind = '';
 
-          if (route.name === "Main") {
-            iconKind = "Foundation";
-            iconName = "home";
-          } else if (route.name === "SearchMember") {
-            iconKind = "Ionicons";
-            iconName += "search-sharp";
-          } else if (route.name === "MyPage") {
-            iconKind = "FontAwesome";
-            iconName = "user-circle-o";
+          if (route.name === 'Main') {
+            iconKind = 'Foundation';
+            iconName = 'home';
+          } else if (route.name === 'SearchMember') {
+            iconKind = 'Ionicons';
+            iconName += 'search-sharp';
+          } else if (route.name === 'MyPage') {
+            iconKind = 'FontAwesome';
+            iconName = 'user-circle-o';
           }
 
-          if (iconKind === "Foundation") {
+          if (iconKind === 'Foundation') {
             return (
               <Foundation
                 name={iconName}
-                color={focused ? "#ED6653" : "#777"}
+                color={focused ? '#ED6653' : '#777'}
                 size={24}
               />
             );
-          } else if (iconKind === "Ionicons") {
+          } else if (iconKind === 'Ionicons') {
             return (
               <Ionicons
                 name={iconName}
-                color={focused ? "#ED6653" : "#777"}
+                color={focused ? '#ED6653' : '#777'}
                 size={24}
               />
             );
-          } else if (iconKind === "FontAwesome") {
+          } else if (iconKind === 'FontAwesome') {
             return (
               <FontAwesome
                 name={iconName}
-                color={focused ? "#ED6653" : "#777"}
+                color={focused ? '#ED6653' : '#777'}
                 size={24}
               />
             );
@@ -57,12 +57,15 @@ const TabNavigator = () => {
       tabBarOptions={{
         showLabel: false,
         style: {
-          backgroundColor: "#FFF",
-          borderTopColor: "#EEE",
-          height: "8%",
+          backgroundColor: '#FFF',
+          borderTopColor: '#EEE',
+          height: '8%',
         },
-      }}>
-      <Tabs.Screen name="파일명" component={파일명} />
+      }}
+    >
+      <Tabs.Screen name="Main" component={Main} />
+      <Tabs.Screen name="Main" component={Main} />
+      <Tabs.Screen name="Main" component={Main} />
     </Tabs.Navigator>
   );
 };
