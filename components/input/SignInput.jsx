@@ -4,7 +4,7 @@ import { View, Text, Input, Item } from 'native-base';
 
 export default function SignInput({ label, value, type, hint, setValue }) {
   return (
-    <View style={{ width: '90%' }}>
+    <View style={{ width: '80%' }}>
       <Text style={styles.label}>{label}</Text>
       <Item regular style={styles.inputBox}>
         <Input
