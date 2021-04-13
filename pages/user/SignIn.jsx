@@ -4,9 +4,9 @@ import {
   Content,
   Text,
   Form,
-  Button,
 } from 'native-base';
 import { SignInput } from '../../components/input/';
+import { SignButton } from '../../components/button/';
 
 export default function SignIn({ navigation }) {
   const goSignUp = () => {
@@ -24,7 +24,7 @@ export default function SignIn({ navigation }) {
     });
   }, []);
 
-  const doSignIn = () => {
+  const goSignIn = () => {
     //로그인 버튼 오류검수
     //관리 상태 값을 확인
     console.log(id);
@@ -56,10 +56,10 @@ export default function SignIn({ navigation }) {
       }} >
 
         <Text style={{
-          marginTop: -50,
-          height: 200,
-          width: 285,
-          fontSize: 18,
+          marginTop: -130,
+          height: 190,
+          width: '80%',
+          fontSize: 20,
           fontWeight: '700',
           lineHeight: 30,
           color: 'black',
@@ -68,14 +68,16 @@ export default function SignIn({ navigation }) {
           // borderStyle: 'solid',
           // borderWidth: 1
         }}>
-          항해99 1기를 위한 소통공간 입니다. 크루원들과 정보도 공유하고 그간 느낀 점을 공유해보세요.
+          항해99 1기를 위한 소통공간 입니다.{"\n"}
+          크루원들과 정보도 공유하고{"\n"}  
+          그간 느낀 점을 공유해보세요.
           </Text>
 
-          {/* 아이디비밀번호양식 */}
+        {/* 아이디비밀번호컨테이너 */}
         <Form style={{
           //  borderStyle: 'solid',
           //  borderWidth: 1,
-          width: 293,
+          alignItems: 'center',
           boder: 1,
           marginTop: 30,
         }}>
@@ -102,17 +104,9 @@ export default function SignIn({ navigation }) {
         </Form>
 
         {/* 로그인버튼 */}
-        <Button full style={{
-          alignSelf: 'center',
-          height: 40,
-          width: 293,
-          borderRadius: 4,
-          paddingRight: 16,
-          paddingLeft: 16,
-          backgroundColor: '#ed6653',
-          marginTop: 55
-        }}><Text>로그인</Text>          
-        </Button>
+        <SignButton
+          title={'로그인'}
+          onPress={goSignIn} />
 
         {/* 회원가입텍스트 */}
         <Text style={{
