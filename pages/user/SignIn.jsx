@@ -1,25 +1,128 @@
-import React from 'react';
-import { getStatusBarHeight } from 'react-native-status-bar-height';
-import { StyleSheet } from 'react-native';
-import { Container, View, Text } from 'native-base';
+import React, { useState, useEffect } from 'react';
+import {
+  Container,
+  Content,
+  Text,
+  Form,
+  Button,
+} from 'native-base';
+import { SignInput } from '../../components/input/';
 
-export default function SignIn() {
+export default function SignIn({ navigation }) {
+  const goSignUp = () => {
+    navigation.navigate('SignUp');
+  };
+  const [id, setId] = useState('');
+  const [password, setPassword] = useState('');
+  const [idError, setidError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+
+  //뒤로가기금지
+  useEffect(() => {
+    navigation.addListener('beforeRemove', (e) => {
+      e.preventDefault();
+    });
+  }, []);
+
+  const doSignIn = () => {
+    //로그인 버튼 오류검수
+    //관리 상태 값을 확인
+    console.log(id);
+    console.log(password);
+    if (id == '') {
+      setidError('이메일을 입력해주세요');
+    } else {
+      setidError('');
+    }
+
+    const goSignUp = () => {
+      navigation.navigate('SignUp');
+    };
+
+    if (password == '') {
+      setPasswordError('비밀번호를 입력해주세요');
+    } else {
+      setPasswordError('');
+    }
+  };
+
   return (
-    <Container style={styles.container}>
-      <View style={styles.content}>
-        <Text>SignIn Page 입니다</Text>
-      </View>
-    </Container>
+    <Container>
+      <Content contentContainerStyle={{
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#fff'
+      }} >
+
+        <Text style={{
+          marginTop: -50,
+          height: 200,
+          width: 285,
+          fontSize: 18,
+          fontWeight: '700',
+          lineHeight: 30,
+          color: 'black',
+          textAlign: 'center',
+          alignItems: 'center',
+          // borderStyle: 'solid',
+          // borderWidth: 1
+        }}>
+          항해99 1기를 위한 소통공간 입니다. 크루원들과 정보도 공유하고 그간 느낀 점을 공유해보세요.
+          </Text>
+
+          {/* 아이디비밀번호양식 */}
+        <Form style={{
+          //  borderStyle: 'solid',
+          //  borderWidth: 1,
+          width: 293,
+          boder: 1,
+          marginTop: 30,
+        }}>
+
+          {/* 아이디 */}
+          <SignInput
+            label={'아이디'}
+            value={id}
+            type={'id'}
+            hint={'아이디를 입력하세요'}
+            setValue={setId}
+            error={idError}
+          />
+
+          {/* 비밀번호 */}
+          <SignInput
+            label={'비밀번호'}
+            value={password}
+            type={'password'}
+            hint={'비밀번호를 입력하세요'}
+            setValue={setPassword}
+            error={passwordError}
+          />
+        </Form>
+
+        {/* 로그인버튼 */}
+        <Button full style={{
+          alignSelf: 'center',
+          height: 40,
+          width: 293,
+          borderRadius: 4,
+          paddingRight: 16,
+          paddingLeft: 16,
+          backgroundColor: '#ed6653',
+          marginTop: 55
+        }}><Text>로그인</Text>          
+        </Button>
+
+        {/* 회원가입텍스트 */}
+        <Text style={{
+          marginLeft: 240,
+          fontSize: 15,
+          marginTop: 35,
+          textDecorationLine: "underline"
+        }} onPress={goSignUp}>회원가입</Text>
+
+      </Content>
+    </Container >
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: getStatusBarHeight(),
-    justifyContent: 'center',
-  },
-  content: {
-    alignItems: 'center',
-  },
-});
