@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Container,
-  Content,
-  Text,
-  Form,
-} from 'native-base';
-import { SignInput } from '../../components/input/';
-import { SignButton } from '../../components/button/';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
+import { StyleSheet, View } from 'react-native';
+import { Container, Content, Text, Form } from 'native-base';
+
+import { SignInput } from '../../components/input';
+import { SignButton } from '../../components/button';
 
 export default function SignIn({ navigation }) {
   const goSignUp = () => {
@@ -48,40 +46,22 @@ export default function SignIn({ navigation }) {
 
   return (
     <Container>
-      <Content contentContainerStyle={{
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#fff'
-      }} >
-
-        <Text style={{
-          marginTop: -130,
-          height: 190,
-          width: '80%',
-          fontSize: 20,
-          fontWeight: '700',
-          lineHeight: 30,
-          color: 'black',
-          textAlign: 'center',
-          alignItems: 'center',
-          // borderStyle: 'solid',
-          // borderWidth: 1
-        }}>
-          항해99 1기를 위한 소통공간 입니다.{"\n"}
-          크루원들과 정보도 공유하고{"\n"}  
-          그간 느낀 점을 공유해보세요.
+      <Content contentContainerStyle={styles.content}>
+        <View>
+          <Text style={styles.title}>
+            항해99 1기를 위한 소통공간 입니다.{'\n'}
+            크루원들과 정보도 공유하고{'\n'}
+            그간 느낀 점을 공유해보세요.
           </Text>
+        </View>
 
-        {/* 아이디비밀번호컨테이너 */}
-        <Form style={{
-          //  borderStyle: 'solid',
-          //  borderWidth: 1,
-          alignItems: 'center',
-          boder: 1,
-          marginTop: 30,
-        }}>
-
+        {/* 아이디/비밀번호 컨테이너 */}
+        <Form
+          style={{
+            marginTop: 30,
+            alignItems: 'center',
+          }}
+        >
           {/* 아이디 */}
           <SignInput
             label={'아이디'}
@@ -104,19 +84,44 @@ export default function SignIn({ navigation }) {
         </Form>
 
         {/* 로그인버튼 */}
-        <SignButton
-          title={'로그인'}
-          onPress={goSignIn} />
+        <SignButton title={'로그인'} onPress={goSignIn} />
 
         {/* 회원가입텍스트 */}
-        <Text style={{
-          marginLeft: 240,
-          fontSize: 15,
-          marginTop: 35,
-          textDecorationLine: "underline"
-        }} onPress={goSignUp}>회원가입</Text>
-
+        <View
+          style={{
+            width: '80%',
+            marginTop: 30,
+            alignItems: 'flex-end',
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 15,
+              textDecorationLine: 'underline',
+            }}
+            onPress={goSignUp}
+          >
+            회원가입
+          </Text>
+        </View>
       </Content>
-    </Container >
+    </Container>
   );
 }
+
+const styles = StyleSheet.create({
+  content: {
+    backgroundColor: '#FFF',
+    flex: 1,
+    marginTop: getStatusBarHeight(),
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  title: {
+    color: 'black',
+    fontSize: 20,
+    fontWeight: '700',
+    lineHeight: 30,
+    textAlign: 'center',
+  },
+});
