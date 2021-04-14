@@ -4,7 +4,7 @@ import { Dimensions, StyleSheet, Text } from 'react-native';
 import { Container, View, Header, Button } from 'native-base';
 
 import { SignInput } from '../../components/input';
-import { SignButton } from '../../components/button';
+import { SignButton, StackButton } from '../../components/button';
 
 import { MaterialIcons } from '@expo/vector-icons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -15,6 +15,8 @@ export default function SignUp({ navigation }) {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+
+  const [stack, setStack] = useState('');
 
   const [scrollHeight, setScrollHeight] = useState(0);
 
@@ -79,6 +81,42 @@ export default function SignUp({ navigation }) {
             setValue={setName}
           />
 
+          {/* 스택 */}
+          <View style={{ width: '80%' }}>
+            <Text style={styles.label}>주특기</Text>
+            <View style={styles.boxContainer}>
+              {/* React Native */}
+              <StackButton
+                title={'React Native'}
+                setStack={setStack}
+                currentStack={stack}
+              />
+
+              {/* React */}
+              <StackButton
+                title={'React'}
+                setStack={setStack}
+                currentStack={stack}
+              />
+            </View>
+
+            <View style={styles.boxContainer}>
+              {/* Node.js */}
+              <StackButton
+                title={'Node.js'}
+                setStack={setStack}
+                currentStack={stack}
+              />
+
+              {/* Spring */}
+              <StackButton
+                title={'Spring'}
+                setStack={setStack}
+                currentStack={stack}
+              />
+            </View>
+          </View>
+
           {/* 회원가입 버튼 */}
           {button()}
         </View>
@@ -108,5 +146,15 @@ const styles = StyleSheet.create({
     height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  label: {
+    color: '#263238',
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  boxContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
 });
