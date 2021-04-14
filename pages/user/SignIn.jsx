@@ -6,17 +6,9 @@ import { Container, Content, Text, Form } from 'native-base';
 import { SignInput } from '../../components/input';
 import { SignButton } from '../../components/button';
 
-
 export default function SignIn({ navigation }) {
-  
-  const goSignUp = () => {
-    navigation.navigate('SignUp');
-  };
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
-  // const [idError, setidError] = useState('');
-  // const [passwordError, setPasswordError] = useState('');
-
 
   //뒤로가기금지
   useEffect(() => {
@@ -26,13 +18,12 @@ export default function SignIn({ navigation }) {
   }, []);
 
   const button = () => {
-    if ( id == '' || password == '' ) {
+    if (id == '' || password == '') {
       return <SignButton title={'로그인'} empty={true} />;
     } else {
       return <SignButton title={'로그인'} empty={false} />;
     }
   };
-  
 
   return (
     <Container>
@@ -45,46 +36,46 @@ export default function SignIn({ navigation }) {
           </Text>
         </View>
 
-
         {/* 아이디/비밀번호 컨테이너 */}
-        
-          <Form
-            style={{
-              marginTop: 30,
-              alignItems: 'center',
-            }}
-          >
-            {/* 아이디 */}
-            <SignInput
-              label={'아이디'}
-              value={id}
-              type={'id'}
-              hint={'아이디를 입력하세요'}
-              setValue={setId}
-              // error={idError}
-            />
 
-            {/* 비밀번호 */}
-            <SignInput
-              label={'비밀번호'}
-              value={password}
-              type={'password'}
-              hint={'비밀번호를 입력하세요'}
-              setValue={setPassword}
-              // error={passwordError}
-            />
-          </Form>
+        <Form
+          style={{
+            marginTop: 30,
+            alignItems: 'center',
+          }}
+        >
+          {/* 아이디 */}
+          <SignInput
+            label={'아이디'}
+            value={id}
+            type={'id'}
+            hint={'아이디를 입력하세요'}
+            setValue={setId}
+          />
 
-          {/* 로그인버튼 */}
-          {button()}
+          {/* 비밀번호 */}
+          <SignInput
+            label={'비밀번호'}
+            value={password}
+            type={'password'}
+            hint={'비밀번호를 입력하세요'}
+            setValue={setPassword}
+          />
+        </Form>
+
+        {/* 로그인버튼 */}
+        {button()}
 
         {/* 회원가입텍스트 */}
         <View style={styles.regist}>
-          <Text style={{
-            fontSize: 15,
-            textDecorationLine: 'underline',
-          }}
-            onPress={goSignUp}
+          <Text
+            style={{
+              fontSize: 15,
+              textDecorationLine: 'underline',
+            }}
+            onPress={() => {
+              navigation.push('SignUp');
+            }}
           >
             회원가입
           </Text>
@@ -109,11 +100,9 @@ const styles = StyleSheet.create({
     lineHeight: 30,
     textAlign: 'center',
   },
-
   regist: {
     width: '80%',
     marginTop: 30,
     alignItems: 'flex-end',
   },
 });
-
