@@ -2,9 +2,15 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { View, Text, Input, Item } from 'native-base';
 
-export default function SignInput({ label, value, type, hint, setValue }) {
+export default function SignInput({ label, value, type, hint, setValue, msg }) {
+  const message = () => {
+    if (msg !== undefined) {
+      return <Text style={styles.msg}>{msg}</Text>;
+    }
+  };
+
   return (
-    <View style={{ width: '80%' }}>
+    <View style={{ width: '80%', marginBottom: 20 }}>
       <Text style={styles.label}>{label}</Text>
       <Item regular style={styles.inputBox}>
         <Input
@@ -19,6 +25,7 @@ export default function SignInput({ label, value, type, hint, setValue }) {
           }}
         />
       </Item>
+      {message()}
     </View>
   );
 }
@@ -31,7 +38,6 @@ const styles = StyleSheet.create({
   },
   inputBox: {
     paddingLeft: 5,
-    marginBottom: 30,
     borderRadius: 4,
     borderColor: '#999',
     alignSelf: 'center',
@@ -42,5 +48,10 @@ const styles = StyleSheet.create({
   },
   input: {
     opacity: 1,
+  },
+  msg: {
+    color: '#999',
+    fontSize: 12,
+    marginStart: 5,
   },
 });

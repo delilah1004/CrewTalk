@@ -15,7 +15,6 @@ export default function SignUp({ navigation }) {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
-
   const [stack, setStack] = useState('');
 
   const [scrollHeight, setScrollHeight] = useState(0);
@@ -26,7 +25,7 @@ export default function SignUp({ navigation }) {
   };
 
   const button = () => {
-    if (id == '' || password == '' || name == '') {
+    if (id == '' || password == '' || name == '' || stack == '') {
       return <SignButton title={'회원가입'} empty={true} />;
     } else {
       return <SignButton title={'회원가입'} empty={false} />;
@@ -61,6 +60,7 @@ export default function SignUp({ navigation }) {
             type={'id'}
             hint={'아이디를 입력하세요'}
             setValue={setId}
+            msg={'아이디는 4글자 이상, 특수문자는 .과 _만 사용가능합니다.'}
           />
 
           {/* 비밀번호 */}
@@ -70,6 +70,9 @@ export default function SignUp({ navigation }) {
             type={'password'}
             hint={'비밀번호를 입력하세요'}
             setValue={setPassword}
+            msg={
+              '비밀번호는 4글자 이상, 숫자 또는 문자가 하나 이상 포함되어야 합니다. 특수문자는 허용되지 않습니다.'
+            }
           />
 
           {/* 이름 */}
