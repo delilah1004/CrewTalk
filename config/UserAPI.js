@@ -2,7 +2,23 @@ import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-const host = 'http://13.125.8.25';
+const host = 'http://13.125.8.25/api';
+
+// 완료
+export async function getHello() {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: host + '/hello',
+    });
+
+    return response.data;
+  } catch (err) {
+    const error = err.response.data.err || err.message;
+
+    Alert.alert(error);
+  }
+}
 
 // 완료
 export async function register(navigation, id, password, name, stack) {

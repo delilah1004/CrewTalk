@@ -1,13 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Container, View, Text } from 'native-base';
 
+import { getHello } from '../config/UserAPI';
+
 export default function Start({ navigation }) {
+  const [hello, setHello] = useState('');
+
+  useEffect(() => {
+    download();
+  }, []);
+
+  const download = async () => {
+    const result = await getHello();
+    setHello(result);
+  };
+
   return (
     <Container style={styles.container}>
       <View style={styles.content}>
-        <Text style={{ fontSize: 40 }}>Start Page 입니다</Text>
+        <Text style={{ fontSize: 40 }}>{hello}</Text>
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
