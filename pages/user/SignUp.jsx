@@ -9,6 +9,8 @@ import { SignButton, StackButton } from '../../components/button';
 import { MaterialIcons } from '@expo/vector-icons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
+import { register } from '../../config/UserAPI';
+
 const windowHeight = Dimensions.get('window').height;
 
 export default function SignUp({ navigation }) {
@@ -28,8 +30,14 @@ export default function SignUp({ navigation }) {
     if (id == '' || password == '' || name == '' || stack == '') {
       return <SignButton title={'회원가입'} empty={true} />;
     } else {
-      return <SignButton title={'회원가입'} empty={false} />;
+      return (
+        <SignButton title={'회원가입'} empty={false} doFunction={signUp} />
+      );
     }
+  };
+
+  const signUp = () => {
+    register(navigation, id, password, name, stack);
   };
 
   return (
@@ -60,7 +68,9 @@ export default function SignUp({ navigation }) {
             type={'id'}
             hint={'아이디를 입력하세요'}
             setValue={setId}
-            msg={'아이디는 4글자 이상, 특수문자는 .과 _만 사용가능합니다.'}
+            msg={
+              '자리수: 4자리 이상\n허용 문자열: 영문 소문자, 숫자, 특수문자(._)'
+            }
           />
 
           {/* 비밀번호 */}
@@ -71,7 +81,7 @@ export default function SignUp({ navigation }) {
             hint={'비밀번호를 입력하세요'}
             setValue={setPassword}
             msg={
-              '비밀번호는 4글자 이상, 숫자 또는 문자가 하나 이상 포함되어야 합니다. 특수문자는 허용되지 않습니다.'
+              '자리수: 4자리 이상\n허용 문자열: 영문 소문자, 숫자\n(각각 하나 이상 포함되어야 함)'
             }
           />
 

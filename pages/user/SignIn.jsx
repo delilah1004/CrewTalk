@@ -6,6 +6,8 @@ import { Container, Content, Text, Form } from 'native-base';
 import { SignInput } from '../../components/input';
 import { SignButton } from '../../components/button';
 
+import { login } from '../../config/UserAPI';
+
 export default function SignIn({ navigation }) {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
@@ -21,8 +23,12 @@ export default function SignIn({ navigation }) {
     if (id == '' || password == '') {
       return <SignButton title={'로그인'} empty={true} />;
     } else {
-      return <SignButton title={'로그인'} empty={false} />;
+      return <SignButton title={'로그인'} empty={false} doFunction={signIn} />;
     }
+  };
+
+  const signIn = () => {
+    login(navigation, id, password);
   };
 
   return (
