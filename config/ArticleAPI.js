@@ -5,24 +5,24 @@ import axios from 'axios';
 const host = 'http://13.125.8.25/api';
 
 // 완료
-export async function createPost(navigation, content, url) {
+export async function createArticle(navigation, title, contents) {
   try {
     const token = await AsyncStorage.getItem('session');
     const response = await axios({
       method: 'post',
-      url: host + '/post',
+      url: host + '/article',
       headers: {
-        Authorization: 'Bearer ' + token,
+        Authorization: token,
       },
       data: {
-        content: content,
-        url: url,
+        title: title,
+        contents: contents,
       },
     });
 
-    if (response.data.success) {
+    if (response.data) {
       await Alert.alert('업로드 완료!');
-      navigation.goBack();
+      navigation.navigate('TabNavigator');
     } else {
       Alert.alert('업로드 실패');
     }

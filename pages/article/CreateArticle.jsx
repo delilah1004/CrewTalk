@@ -6,14 +6,18 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { CUButton } from '../../components/button';
 
-const upload = () => {};
+import { createArticle } from '../../config/ArticleAPI';
 
-export default function CreateArticle() {
+export default function CreateArticle({ navigation }) {
   const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  const [contents, setContents] = useState('');
+
+  const upload = () => {
+    createArticle(navigation, title, contents);
+  };
 
   const button = () => {
-    if (title == '' || content == '') {
+    if (title == '' || contents == '') {
       return <CUButton title={'작성 완료'} empty={true} />;
     } else {
       return <CUButton title={'작성 완료'} empty={false} doFunction={upload} />;
@@ -68,11 +72,11 @@ export default function CreateArticle() {
             style={styles.content}
             rowSpan={10}
             borderRadius={5}
-            value={content}
+            value={contents}
             placeholder="함께 나누고 싶은 생각을 적어주세요"
             placeholderTextColor="#AAA"
             onChangeText={(text) => {
-              setContent(text);
+              setContents(text);
             }}
           />
         </Form>
