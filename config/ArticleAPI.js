@@ -41,8 +41,36 @@ export async function getArticleAll() {
       url: host + '/article/all',
     });
 
-    // console.log(response.data);
     return response.data;
+  } catch (err) {
+    const error = err.response.data.error || err.message;
+
+    Alert.alert(error);
+  }
+}
+
+// 완료
+export async function readArticle(navigation, title, contents) {
+  try {
+    const token = await AsyncStorage.getItem('session');
+    const response = await axios({
+      method: 'post',
+      url: host + '/article',
+      headers: {
+        Authorization: token,
+      },
+      data: {
+        title: title,
+        contents: contents,
+      },
+    });
+
+    if (response.data) {
+      await Alert.alert('업로드 완료!');
+      navigation.navigate('TabNavigator');
+    } else {
+      Alert.alert('업로드 실패');
+    }
   } catch (err) {
     const error = err.response.data.error || err.message;
 
