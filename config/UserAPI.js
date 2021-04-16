@@ -61,12 +61,12 @@ export async function login(navigation, id, password) {
       },
     });
 
-    console.log(response.headers.authorization);
-    // const token = response.headers.authorization;
-    // await AsyncStorage.setItem('session', token);
+    // console.log(response.headers.authorization);
+    const token = response.headers.authorization;
+    await AsyncStorage.setItem('session', token);
 
-    // Alert.alert('로그인 성공!');
-    // navigation.push('Main');
+    Alert.alert('로그인 성공!');
+    navigation.push('TabNavigator');
   } catch (err) {
     const error = err.response.data.message || err.message;
 

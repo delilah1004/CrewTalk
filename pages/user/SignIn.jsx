@@ -3,12 +3,18 @@ import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { StyleSheet, View } from 'react-native';
 import { Container, Content, Text, Form } from 'native-base';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { SignInput } from '../../components/input';
 import { SignButton } from '../../components/button';
+
+import Loading from '../Loading';
 
 import { login } from '../../config/UserAPI';
 
 export default function SignIn({ navigation }) {
+  const [ready, setReady] = useState(false);
+
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
 
@@ -17,7 +23,16 @@ export default function SignIn({ navigation }) {
     navigation.addListener('beforeRemove', (e) => {
       e.preventDefault();
     });
-  }, []);
+    setTimeout(() => {
+      AsyncStorage.getItem('session', (err, token) => {
+        if (token) {
+          navigation.push('TabNavigator');
+        } else {
+          setReady(true);
+        }
+      });
+    });
+  }, [navigation]);
 
   const button = () => {
     if (id == '' || password == '') {
@@ -31,7 +46,7 @@ export default function SignIn({ navigation }) {
     login(navigation, id, password);
   };
 
-  return (
+  return ready ? (
     <Container>
       <Content contentContainerStyle={styles.content}>
         <View>
@@ -88,6 +103,8 @@ export default function SignIn({ navigation }) {
         </View>
       </Content>
     </Container>
+  ) : (
+    <Loading />
   );
 }
 
