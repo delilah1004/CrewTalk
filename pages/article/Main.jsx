@@ -6,7 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import { Container, View, Text, Grid, Col, Content } from 'native-base';
+import { Container, View, Text } from 'native-base';
 
 import { FontAwesome } from '@expo/vector-icons';
 
@@ -23,11 +23,10 @@ export default function Main({ navigation }) {
   const [articles, setArticles] = useState([]);
 
   useEffect(() => {
-    // navigation.addListener('beforeRemove', (e) => {
-    //   e.preventDefault();
-    // });
+    navigation.addListener('beforeRemove', (e) => {
+      e.preventDefault();
+    });
     download();
-    setReady(true);
   }, [navigation]);
 
   const download = async () => {

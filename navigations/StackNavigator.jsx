@@ -1,8 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import Start from '../pages/Start';
-
 import TabNavigator from './TabNavigator';
 
 import { SignIn, SignUp } from '../pages/user';
@@ -10,6 +8,7 @@ import {
   Main,
   ReadArticle,
   CreateArticle,
+  SearchArticle,
   UpdateArticle,
 } from '../pages/article';
 
@@ -22,8 +21,6 @@ const StackNavigator = () => {
         headerShown: false,
       }}
     >
-      <Stack.Screen name="Start" component={Start} />
-
       <Stack.Screen name="SignIn" component={SignIn} />
       <Stack.Screen name="SignUp" component={SignUp} />
 
@@ -32,6 +29,7 @@ const StackNavigator = () => {
       <Stack.Screen name="Main" component={Main} />
       <Stack.Screen name="ReadArticle" component={ReadArticle} />
       <Stack.Screen name="CreateArticle" component={CreateArticle} />
+      <Stack.Screen name="SearchArticle" component={SearchArticle} />
       <Stack.Screen name="UpdateArticle" component={UpdateArticle} />
     </Stack.Navigator>
   );
