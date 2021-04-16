@@ -61,7 +61,6 @@ export async function login(navigation, id, password) {
       },
     });
 
-    // console.log(response.headers.authorization);
     const token = response.headers.authorization;
     await AsyncStorage.setItem('session', token);
 
