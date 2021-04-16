@@ -4,22 +4,18 @@ import { Text, View } from 'native-base';
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import { MainCardHeader } from './MainCardHeader';
-import { DetailCardHeader } from './DetailCardHeader';
+import ArticleCardHeader from './ArticleCardHeader';
 
 export default function ArticleCard({ navigation, article, loc }) {
-  const showHeader = () => {
-    if (loc == 'main') {
-      return <MainCardHeader navigation={navigation} article={article} />;
-    } else if (loc == 'detail') {
-      return <DetailCardHeader navigation={navigation} article={article} />;
-    }
-  };
-
   const showCommentButton = () => {
     if (loc == 'main') {
       return (
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            navigation.push('ReadArticle', article);
+          }}
+        >
           <MaterialCommunityIcons
             name="comment-processing-outline"
             size={20}
@@ -46,7 +42,8 @@ export default function ArticleCard({ navigation, article, loc }) {
 
   return (
     <View style={styles.article}>
-      {/* {showHeader()} */}
+      {/* 헤더 */}
+      <ArticleCardHeader navigation={navigation} article={article} loc={loc} />
 
       {/* 제목 */}
       <Text style={styles.title}>{article.title}</Text>

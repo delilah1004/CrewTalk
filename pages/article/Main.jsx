@@ -11,7 +11,7 @@ import { Container, View, Text } from 'native-base';
 import { FontAwesome } from '@expo/vector-icons';
 
 import Loading from '../../pages/Loading';
-import { ArticleCard } from '../../components/card';
+import ArticleCard from '../../components/card/ArticleCard';
 
 import { getArticleAll } from '../../config/ArticleAPI';
 
@@ -26,14 +26,15 @@ export default function Main({ navigation }) {
     navigation.addListener('beforeRemove', (e) => {
       e.preventDefault();
     });
-    download();
+    setTimeout(() => {
+      download();
+    });
+    setReady(true);
   }, [navigation]);
 
   const download = async () => {
     const result = await getArticleAll();
     setArticles(result);
-
-    setReady(true);
   };
 
   return ready ? (
@@ -61,6 +62,7 @@ export default function Main({ navigation }) {
         </View>
       </TouchableOpacity>
 
+      {/* 글목록 */}
       <ScrollView>
         <View>
           {articles.map((article, i) => {
