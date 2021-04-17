@@ -35,14 +35,11 @@ export async function register(navigation, id, password, name, stack) {
     });
 
     console.log(response.data);
-    // if (response.data.success) {
-    //   Alert.alert('회원가입 성공!');
-    //   navigation.push('SignIn');
-    // } else {
-    //   Alert.alert('회원가입 실패');
-    // }
+
+    Alert.alert('회원가입 성공!');
+    navigation.push('SignIn');
   } catch (err) {
-    const error = err.response.data.message || err.message;
+    const error = err.response.data.err || err.message;
 
     Alert.alert(error);
   }
@@ -63,6 +60,8 @@ export async function login(navigation, id, password) {
 
     const token = response.headers.authorization;
     await AsyncStorage.setItem('session', token);
+
+    console.log(token);
 
     Alert.alert('로그인 성공!');
     navigation.push('TabNavigator');
