@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import {
+  RefreshControl,
   Dimensions,
   ScrollView,
+  View,
+  Text,
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import { Container, View, Text } from 'native-base';
+import { Container } from 'native-base';
 
 import { FontAwesome } from '@expo/vector-icons';
 
@@ -18,16 +21,29 @@ import { getArticleAll } from '../../config/ArticleAPI';
 const WindowWidth = Dimensions.get('window').width;
 const ThumbSize = WindowWidth * 0.12;
 
+const wait = (timeout) => {
+  return new Promise((resolve) => setTimeout(resolve, timeout));
+};
+
 export default function Main({ navigation }) {
   const [ready, setReady] = useState(false);
   const [articles, setArticles] = useState([]);
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    wait(1000).then(() => setRefreshing(false));
+  }, []);
 
   useEffect(() => {
     navigation.addListener('beforeRemove', (e) => {
       e.preventDefault();
     });
-    setTimeout(() => {
-      download();
+    navigation.addListener('focus', (e) => {
+      setTimeout(() => {
+        download();
+      });
     });
     setReady(true);
   }, [navigation]);
@@ -63,7 +79,11 @@ export default function Main({ navigation }) {
       </TouchableOpacity>
 
       {/* 글목록 */}
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <View>
           {articles.map((article, i) => {
             return (
@@ -71,6 +91,7 @@ export default function Main({ navigation }) {
                 navigation={navigation}
                 article={article}
                 loc={'main'}
+                onRefresh={onRefresh}
                 key={i}
               />
             );
