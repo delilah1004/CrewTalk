@@ -7,7 +7,7 @@ const im = require('../../assets/icon.png');
 const WindowWidth = Dimensions.get('window').width;
 const ThumbSize = WindowWidth * 0.12;
 
-export default function ArticleCardHeader({ navigation, article, loc }) {
+export default function ArticleCardHeader({ navigation, article }) {
   const timeForToday = (value) => {
     const today = new Date();
     const timeValue = new Date(value);
@@ -33,29 +33,6 @@ export default function ArticleCardHeader({ navigation, article, loc }) {
     return `${Math.floor(betweenTimeDay / 365)}년전`;
   };
 
-  const showButton = () => {
-    if (loc == 'detail') {
-      return (
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}
-        >
-          {/* 수정 버튼 */}
-          <TouchableOpacity style={[styles.button, { marginEnd: 5 }]}>
-            <Text style={styles.text}>수정</Text>
-          </TouchableOpacity>
-
-          {/* 삭제 버튼 */}
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.text}>삭제</Text>
-          </TouchableOpacity>
-        </View>
-      );
-    }
-  };
-
   return (
     // {/* 글 작성자 정보 */}
     <View style={styles.itemHeader}>
@@ -68,7 +45,9 @@ export default function ArticleCardHeader({ navigation, article, loc }) {
         <View style={styles.infoBox}>
           <View style={styles.user}>
             {/* 글 작성자 이름 */}
-            <Text style={styles.authorName}>{article.author}</Text>
+            <Text style={styles.authorName}>
+              {article.authorName} ({article.authorId})
+            </Text>
 
             <Text
               style={{
@@ -88,8 +67,6 @@ export default function ArticleCardHeader({ navigation, article, loc }) {
           <Text style={styles.authorStack}>{article.stack}</Text>
         </View>
       </View>
-
-      {showButton()}
     </View>
   );
 }
