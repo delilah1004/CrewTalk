@@ -60,7 +60,7 @@ const TabNavigator = () => {
         style: {
           backgroundColor: '#FFF',
           borderTopColor: '#EEE',
-          height: '6%',
+          height: '7%',
         },
       }}
     >
