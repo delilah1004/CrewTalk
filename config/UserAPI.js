@@ -61,8 +61,6 @@ export async function login(navigation, id, password) {
     const token = response.headers.authorization;
     await AsyncStorage.setItem('session', token);
 
-    console.log(token);
-
     Alert.alert('로그인 성공!');
     navigation.push('TabNavigator');
   } catch (err) {
@@ -77,8 +75,29 @@ export async function logout(navigation) {
   try {
     await AsyncStorage.clear();
 
-    Alert.alert('로그아웃!');
+    await Alert.alert('로그아웃!');
     navigation.push('SignIn');
+  } catch (err) {
+    const error = err.response.data.message || err.message;
+
+    Alert.alert(error);
+  }
+}
+
+// 완료
+export async function getUserInfo() {
+  try {
+    const token = await AsyncStorage.getItem('session');
+    const response = await axios({
+      method: 'get',
+      url: host + '/api/user/cur_user',
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    // console.log(response.data);
+    return response.data;
   } catch (err) {
     const error = err.response.data.message || err.message;
 
