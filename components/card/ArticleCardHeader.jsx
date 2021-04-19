@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { Text, Thumbnail, View } from 'native-base';
 
-const im = require('../../assets/icon.png');
+const img = require('../../assets/mask_lion.jpg');
 
 const WindowWidth = Dimensions.get('window').width;
 const ThumbSize = WindowWidth * 0.12;
@@ -39,7 +39,7 @@ export default function ArticleCardHeader({ navigation, article }) {
       <View style={{ flexDirection: 'row' }}>
         {/* 글 작성자 이미지 */}
         <TouchableOpacity>
-          <Thumbnail style={styles.thumbnail} source={im} />
+          <Thumbnail style={styles.thumbnail} source={img} />
         </TouchableOpacity>
 
         <View style={styles.infoBox}>
