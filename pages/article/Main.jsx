@@ -17,6 +17,7 @@ import Loading from '../../pages/Loading';
 import ArticleCard from '../../components/card/ArticleCard';
 
 import { getArticleAll } from '../../config/ArticleAPI';
+import { getUserInfo } from '../../config/UserAPI';
 
 const WindowWidth = Dimensions.get('window').width;
 const ThumbSize = WindowWidth * 0.12;
@@ -31,10 +32,7 @@ export default function Main({ navigation }) {
 
   const [refreshing, setRefreshing] = useState(false);
 
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    wait(1000).then(() => setRefreshing(false));
-  }, []);
+  const [userId, setUserId] = useState('');
 
   useEffect(() => {
     navigation.addListener('beforeRemove', (e) => {
@@ -45,6 +43,7 @@ export default function Main({ navigation }) {
         download();
       });
     });
+    getUserId();
     setReady(true);
   }, [navigation]);
 
@@ -53,37 +52,48 @@ export default function Main({ navigation }) {
     setArticles(result);
   };
 
+  const getUserId = async () => {
+    const user = await getUserInfo();
+    setUserId(user.username);
+  };
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    wait(1000).then(() => setRefreshing(false));
+  }, []);
+
   return ready ? (
     <Container style={styles.container}>
-      {/* 글쓰기 */}
-      <TouchableOpacity
-        onPress={() => {
-          navigation.push('CreateArticle');
-        }}
-      >
-        <View style={styles.createBox}>
-          <View style={{ width: '20%' }}>
-            <FontAwesome
-              style={{ alignSelf: 'center' }}
-              name="user-circle-o"
-              size={ThumbSize}
-              color="#C7C7C7"
-            />
-          </View>
-          <View style={{ width: '80%' }}>
-            <Text style={styles.createText}>
-              함께 나누고 싶은 생각이 있으신가요?
-            </Text>
-          </View>
-        </View>
-      </TouchableOpacity>
-
-      {/* 글목록 */}
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
+        {/* 글쓰기 */}
+        <TouchableOpacity
+          onPress={() => {
+            navigation.push('CreateArticle');
+          }}
+        >
+          <View style={styles.createBox}>
+            <View style={{ width: '20%' }}>
+              <FontAwesome
+                style={{ alignSelf: 'center' }}
+                name="user-circle-o"
+                size={ThumbSize}
+                color="#C7C7C7"
+              />
+            </View>
+            <View style={{ width: '80%' }}>
+              <Text style={styles.createText}>
+                함께 나누고 싶은 생각이 있으신가요?
+              </Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+
+        {/* 글목록 */}
+
         <View>
           {articles.map((article, i) => {
             return (
@@ -91,8 +101,8 @@ export default function Main({ navigation }) {
                 navigation={navigation}
                 article={article}
                 loc={'main'}
-                onRefresh={onRefresh}
                 key={i}
+                userId={userId}
               />
             );
           })}
