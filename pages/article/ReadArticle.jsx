@@ -11,7 +11,6 @@ import { createComment, getComments } from '../../config/CommentAPI';
 
 export default function ReadArticle({ navigation, route }) {
   const data = route.params;
-  console.log(data);
 
   const [ready, setReady] = useState(false);
   const [comments, setComments] = useState([]);
@@ -100,6 +99,7 @@ export default function ReadArticle({ navigation, route }) {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: '#EEE',
     flex: 1,
     marginTop: getStatusBarHeight(),
     justifyContent: 'center',
