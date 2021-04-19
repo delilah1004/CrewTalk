@@ -33,7 +33,10 @@ export async function getComments(articleId) {
   try {
     const response = await axios({
       method: 'get',
-      url: host + '/' + articleId,
+      url: host + '/',
+      params: {
+        articleId: articleId,
+      },
     });
 
     return response.data;
