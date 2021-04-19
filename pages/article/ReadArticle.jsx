@@ -1,22 +1,38 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { Container, Footer, Input, Text, View } from 'native-base';
 
+import Loading from '../../pages/Loading';
 import ArticleCard from '../../components/card/ArticleCard';
+import { CommentItem } from '../../components/item';
+
+import { createComment, getComments } from '../../config/CommentAPI';
 
 export default function ReadArticle({ navigation, route }) {
   const article = route.params;
+
+  const [ready, setReady] = useState(false);
+  const [comments, setComments] = useState([]);
   const [currentComment, setCurrentComment] = useState('');
 
+  useEffect(() => {
+    navigation.addListener('focus', (e) => {
+      download();
+    });
+    setReady(true);
+  }, [navigation]);
+
+  const download = async () => {
+    const result = await getComments(article.id);
+    setComments(result);
+  };
+
   const commentUpload = async () => {
-    const result = await createComment(postId, currentComment);
+    const result = await createComment(article.id, currentComment);
     if (result) {
-      await Alert.alert('댓글 작성 완료!');
       setCurrentComment('');
       download();
-    } else {
-      Alert.alert('댓글 작성 실패');
     }
   };
 
@@ -41,7 +57,7 @@ export default function ReadArticle({ navigation, route }) {
     }
   };
 
-  return (
+  return ready ? (
     <Container style={styles.container}>
       <ScrollView>
         {/* 게시글 상세 */}
@@ -49,15 +65,11 @@ export default function ReadArticle({ navigation, route }) {
 
         {/* 댓글 목록 */}
         <View style={{ paddingBottom: 10 }}>
-          {/* {article.comment.map((comment, i) => {
+          {comments.map((comment, i) => {
             return (
-              <CommentComponent
-                navigation={navigation}
-                comment={comment}
-                key={i}
-              />
+              <CommentItem navigation={navigation} comment={comment} key={i} />
             );
-          })} */}
+          })}
         </View>
       </ScrollView>
 
@@ -75,6 +87,8 @@ export default function ReadArticle({ navigation, route }) {
         {showButton()}
       </Footer>
     </Container>
+  ) : (
+    <Loading />
   );
 }
 
