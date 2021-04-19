@@ -10,7 +10,8 @@ import { CommentItem } from '../../components/item';
 import { createComment, getComments } from '../../config/CommentAPI';
 
 export default function ReadArticle({ navigation, route }) {
-  const article = route.params;
+  const data = route.params;
+  console.log(data);
 
   const [ready, setReady] = useState(false);
   const [comments, setComments] = useState([]);
@@ -24,12 +25,12 @@ export default function ReadArticle({ navigation, route }) {
   }, [navigation]);
 
   const download = async () => {
-    const result = await getComments(article.id);
+    const result = await getComments(data.article.id);
     setComments(result);
   };
 
   const commentUpload = async () => {
-    const result = await createComment(article.id, currentComment);
+    const result = await createComment(data.article.id, currentComment);
     if (result) {
       setCurrentComment('');
       download();
@@ -61,7 +62,12 @@ export default function ReadArticle({ navigation, route }) {
     <Container style={styles.container}>
       <ScrollView>
         {/* 게시글 상세 */}
-        <ArticleCard navigation={navigation} article={article} loc={'detail'} />
+        <ArticleCard
+          navigation={navigation}
+          article={data.article}
+          loc={'detail'}
+          userId={data.userId}
+        />
 
         {/* 댓글 목록 */}
         <View style={{ paddingBottom: 10 }}>
