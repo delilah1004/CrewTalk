@@ -23,7 +23,9 @@ export default function CommentItem({ navigation, comment }) {
         <View style={styles.infoBox}>
           <View style={styles.user}>
             {/* 댓글 작성자 이름 */}
-            <Text style={styles.authorName}>{comment.username}</Text>
+            <Text style={styles.authorName}>
+              {comment.cmtUsername}({comment.cmtUserId})
+            </Text>
           </View>
 
           {/* 댓글 작성자 스택 */}
