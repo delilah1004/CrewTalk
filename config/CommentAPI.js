@@ -4,15 +4,17 @@ import axios from 'axios';
 
 const host = 'http://13.125.8.25/api/comment';
 
-//
 export async function createComment(articleId, comment) {
   try {
     const token = await AsyncStorage.getItem('session');
     await axios({
       method: 'post',
-      url: host + '/' + articleId,
+      url: host + '/',
       headers: {
         Authorization: token,
+      },
+      params: {
+        articleId: articleId,
       },
       data: {
         comments: comment,
@@ -28,7 +30,6 @@ export async function createComment(articleId, comment) {
   }
 }
 
-//
 export async function getComments(articleId) {
   try {
     const response = await axios({
