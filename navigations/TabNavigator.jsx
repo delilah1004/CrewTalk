@@ -4,8 +4,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Platform from 'react-native';
 import { Foundation, Ionicons, FontAwesome } from '@expo/vector-icons';
 
-import { Main, SearchArticle } from '../pages/article';
-import { MyPage } from '../pages/user';
+import { Main } from '../pages/article';
+import { SearchCrew, MyPage } from '../pages/user';
 
 const Tabs = createBottomTabNavigator();
 
@@ -20,7 +20,7 @@ const TabNavigator = () => {
           if (route.name === 'Main') {
             iconKind = 'Foundation';
             iconName = 'home';
-          } else if (route.name === 'SearchArticle') {
+          } else if (route.name === 'SearchCrew') {
             iconKind = 'Ionicons';
             iconName += 'search-sharp';
           } else if (route.name === 'MyPage') {
@@ -65,7 +65,7 @@ const TabNavigator = () => {
       }}
     >
       <Tabs.Screen name="Main" component={Main} />
-      <Tabs.Screen name="SearchArticle" component={SearchArticle} />
+      <Tabs.Screen name="SearchCrew" component={SearchCrew} />
       <Tabs.Screen name="MyPage" component={MyPage} />
     </Tabs.Navigator>
   );
