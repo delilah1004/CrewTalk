@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Text } from 'native-base';
 
-export default function StackButton({ title, setStack, currentStack }) {
+export default function StackSelectButton({ title, setStack, currentStack }) {
   if (title == currentStack) {
     return (
       <TouchableOpacity
