@@ -3,7 +3,6 @@ import { getStatusBarHeight } from 'react-native-status-bar-height';
 import {
   RefreshControl,
   Dimensions,
-  ScrollView,
   View,
   Text,
   StyleSheet,
@@ -11,12 +10,17 @@ import {
 } from 'react-native';
 import { Container } from 'native-base';
 
+import { OptimizedFlatList } from 'react-native-optimized-flatlist';
 import { FontAwesome } from '@expo/vector-icons';
 
 import Loading from '../../pages/Loading';
+
 import ArticleCard from '../../components/card/ArticleCard';
 
-import { getArticleAll } from '../../config/ArticleAPI';
+import {
+  getArticleByPage,
+  getArticleByNextPage,
+} from '../../config/ArticleAPI';
 import { getUserInfo } from '../../config/UserAPI';
 
 const WindowWidth = Dimensions.get('window').width;
@@ -33,6 +37,7 @@ export default function Main({ navigation }) {
   const [refreshing, setRefreshing] = useState(false);
 
   const [userId, setUserId] = useState('');
+  const [pageNum, setPageNum] = useState(1);
 
   useEffect(() => {
     navigation.addListener('beforeRemove', (e) => {
@@ -48,7 +53,9 @@ export default function Main({ navigation }) {
   }, [navigation]);
 
   const download = async () => {
-    const result = await getArticleAll();
+    // const result = await getArticleAll();
+    const result = await getArticleByPage(pageNum);
+    console.log(result);
     setArticles(result);
   };
 
@@ -64,50 +71,65 @@ export default function Main({ navigation }) {
 
   return ready ? (
     <Container style={styles.container}>
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
-        {/* 글쓰기 */}
-        <TouchableOpacity
-          onPress={() => {
-            navigation.push('CreateArticle');
-          }}
-        >
-          <View style={styles.createBox}>
-            <View style={{ width: '20%' }}>
-              <FontAwesome
-                style={{ alignSelf: 'center' }}
-                name="user-circle-o"
-                size={ThumbSize}
-                color="#C7C7C7"
-              />
-            </View>
-            <View style={{ width: '80%' }}>
-              <Text style={styles.createText}>
-                함께 나누고 싶은 생각이 있으신가요?
-              </Text>
-            </View>
-          </View>
-        </TouchableOpacity>
-
-        {/* 글목록 */}
-
-        <View>
-          {articles.map((article, i) => {
+      {articles.length == 0 ? (
+        <ActivityIndicator size="large" />
+      ) : (
+        <OptimizedFlatList
+          data={articles}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+          ListHeaderComponent={() => {
             return (
-              <ArticleCard
-                navigation={navigation}
-                article={article}
-                loc={'main'}
-                key={i}
-                userId={userId}
-              />
+              //  {/* 글쓰기 */}
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.push('CreateArticle');
+                }}
+              >
+                <View style={styles.createBox}>
+                  <View style={{ width: '20%' }}>
+                    <FontAwesome
+                      style={{ alignSelf: 'center' }}
+                      name="user-circle-o"
+                      size={ThumbSize}
+                      color="#C7C7C7"
+                    />
+                  </View>
+                  <View style={{ width: '80%' }}>
+                    <Text style={styles.createText}>
+                      함께 나누고 싶은 생각이 있으신가요?
+                    </Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
             );
-          })}
-        </View>
-      </ScrollView>
+          }}
+          onEndReachedThreshold={0.1}
+          onEndReached={async () => {
+            let nextArticles = await getArticleByNextPage(pageNum, setPageNum);
+            if (nextArticles != 0) {
+              let allArticles = [...articles, ...nextArticles];
+              await setArticles(allArticles);
+            }
+          }}
+          renderItem={(article, i) => {
+            return (
+              <View>
+                <ArticleCard
+                  navigation={navigation}
+                  article={article.item}
+                  loc={'main'}
+                  userId={userId}
+                  key={i}
+                />
+              </View>
+            );
+          }}
+          numColumns={1}
+          keyExtractor={(item, index) => index.toString()}
+        />
+      )}
     </Container>
   ) : (
     <Loading />
