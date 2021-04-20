@@ -1,12 +1,12 @@
 import MyPage from './MyPage';
-import SearchMember from './SearchMember';
+import SearchCrew from './SearchCrew';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
 import Setting from './Setting';
 
 module.exports = {
   MyPage,
-  SearchMember,
+  SearchCrew,
   SignIn,
   SignUp,
   Setting,
