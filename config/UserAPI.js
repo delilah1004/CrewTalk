@@ -96,7 +96,39 @@ export async function getUserInfo() {
       },
     });
 
-    // console.log(response.data);
+    return response.data;
+  } catch (err) {
+    const error = err.response.data.message || err.message;
+
+    Alert.alert(error);
+  }
+}
+
+export async function getCrewList() {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: host + '/api/user/all',
+    });
+
+    return response.data;
+  } catch (err) {
+    const error = err.response.data.message || err.message;
+
+    Alert.alert(error);
+  }
+}
+
+export async function getCrewListByStack(stack) {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: host + '/api/user',
+      params: {
+        stack: stack,
+      },
+    });
+
     return response.data;
   } catch (err) {
     const error = err.response.data.message || err.message;
