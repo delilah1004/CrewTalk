@@ -69,10 +69,16 @@ export default function ReadArticle({ navigation, route }) {
         />
 
         {/* 댓글 목록 */}
-        <View style={{ paddingBottom: 10 }}>
+        <View>
           {comments.map((comment, i) => {
             return (
-              <CommentItem navigation={navigation} comment={comment} key={i} />
+              <CommentItem
+                navigation={navigation}
+                comment={comment}
+                userId={data.userId}
+                download={download}
+                key={i}
+              />
             );
           })}
         </View>
