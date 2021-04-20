@@ -12,32 +12,25 @@ export default function ArticleCardFooter({ navigation, article, userId }) {
   if (userId == article.authorId) {
     return (
       <View style={styles.buttonContainer}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
+        {/* 수정 버튼 */}
+        <TouchableOpacity
+          style={[styles.button, { marginEnd: 5 }]}
+          onPress={() => {
+            navigation.push('UpdateArticle', article);
           }}
         >
-          {/* 수정 버튼 */}
-          <TouchableOpacity
-            style={[styles.button, { marginEnd: 5 }]}
-            onPress={() => {
-              navigation.push('UpdateArticle', article);
-            }}
-          >
-            <Text style={styles.text}>수정</Text>
-          </TouchableOpacity>
+          <Text style={styles.text}>수정</Text>
+        </TouchableOpacity>
 
-          {/* 삭제 버튼 */}
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              remove();
-            }}
-          >
-            <Text style={styles.text}>삭제</Text>
-          </TouchableOpacity>
-        </View>
+        {/* 삭제 버튼 */}
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            remove();
+          }}
+        >
+          <Text style={styles.text}>삭제</Text>
+        </TouchableOpacity>
       </View>
     );
   } else {
@@ -49,6 +42,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     marginTop: 10,
+    alignItems: 'center',
     justifyContent: 'flex-end',
   },
   button: {
