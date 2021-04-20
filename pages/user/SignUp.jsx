@@ -4,16 +4,19 @@ import { Dimensions, StyleSheet, Text } from 'react-native';
 import { Container, View, Header, Button } from 'native-base';
 
 import { SignInput } from '../../components/input';
-import { SignButton, StackButton } from '../../components/button';
+import { SignButton, StackSelectButton } from '../../components/button';
 
 import { MaterialIcons } from '@expo/vector-icons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
+import stackList from '../../config/mock/stackList.json';
 import { register } from '../../config/UserAPI';
 
 const windowHeight = Dimensions.get('window').height;
 
 export default function SignUp({ navigation }) {
+  const stacks = stackList.stack;
+
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
@@ -59,7 +62,6 @@ export default function SignUp({ navigation }) {
         contentContainerStyle={[styles.scroll, { height: scrollHeight }]}
       >
         {/* Contents */}
-
         <View style={[styles.content]}>
           {/* 아이디 */}
           <SignInput
@@ -98,35 +100,16 @@ export default function SignUp({ navigation }) {
           <View style={{ width: '80%' }}>
             <Text style={styles.label}>주특기</Text>
             <View style={styles.boxContainer}>
-              {/* React Native */}
-              <StackButton
-                title={'React Native'}
-                setStack={setStack}
-                currentStack={stack}
-              />
-
-              {/* React */}
-              <StackButton
-                title={'React'}
-                setStack={setStack}
-                currentStack={stack}
-              />
-            </View>
-
-            <View style={styles.boxContainer}>
-              {/* Node.js */}
-              <StackButton
-                title={'Node.js'}
-                setStack={setStack}
-                currentStack={stack}
-              />
-
-              {/* Spring */}
-              <StackButton
-                title={'Spring'}
-                setStack={setStack}
-                currentStack={stack}
-              />
+              {stacks.map((title, i) => {
+                return (
+                  <StackSelectButton
+                    title={title}
+                    setStack={setStack}
+                    currentStack={stack}
+                    key={i}
+                  />
+                );
+              })}
             </View>
           </View>
 
@@ -168,6 +151,7 @@ const styles = StyleSheet.create({
   boxContainer: {
     width: '100%',
     flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'space-around',
   },
 });
