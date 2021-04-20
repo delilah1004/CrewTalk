@@ -48,7 +48,7 @@ export async function getComments(articleId) {
   }
 }
 
-// 완료
+//
 export async function updateComment(commentId, comment) {
   try {
     const token = await AsyncStorage.getItem('session');
@@ -63,7 +63,7 @@ export async function updateComment(commentId, comment) {
       },
     });
 
-    return response.data;
+    Alert.alert(response.data.Success);
   } catch (err) {
     const error = err.response.data.err || err.message;
 

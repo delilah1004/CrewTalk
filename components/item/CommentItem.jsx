@@ -1,8 +1,14 @@
-import React from 'react';
-import { StyleSheet, Text, Dimensions, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import {
+  StyleSheet,
+  Text,
+  Dimensions,
+  TouchableOpacity,
+  TextInput,
+} from 'react-native';
 import { Thumbnail, View } from 'native-base';
 
-import { deleteComment } from '../../config/CommentAPI';
+import { updateComment, deleteComment } from '../../config/CommentAPI';
 
 const img = require('../../assets/mask_lion.jpg');
 
@@ -10,17 +16,81 @@ const WindowWidth = Dimensions.get('window').width;
 const ThumbSize = WindowWidth * 0.1;
 
 export default function CommentItem({ navigation, comment, userId, download }) {
+  const [currentComment, setCurrentComment] = useState(comment.comments);
+  const [state, setState] = useState(false);
+
+  const edit = async () => {
+    await updateComment(comment.id, currentComment);
+    download();
+    setState(false);
+  };
+
   const remove = async () => {
     await deleteComment(comment.id);
     download();
   };
 
+  const showComment = () => {
+    if (state) {
+      // 댓글 수정
+      return (
+        <TextInput
+          style={styles.editComment}
+          placeholder={'댓글을 입력해주세요.'}
+          placeholderTextColor="#AAA"
+          value={currentComment}
+          onChangeText={(text) => {
+            setCurrentComment(text);
+          }}
+        />
+      );
+    } else {
+      //댓글 내용
+      return (
+        <Text style={styles.comment} numberOfLines={3}>
+          {comment.comments}
+        </Text>
+      );
+    }
+  };
+
   const showFooter = () => {
-    if (userId == comment.cmtUserId) {
+    if (state) {
+      return (
+        <View style={styles.buttonContainer}>
+          {/* 취소 버튼 */}
+          <Text
+            style={styles.text}
+            onPress={() => {
+              setState(false);
+            }}
+          >
+            취소
+          </Text>
+
+          {/* 완료 버튼 */}
+          <Text
+            style={styles.text}
+            onPress={() => {
+              edit();
+            }}
+          >
+            완료
+          </Text>
+        </View>
+      );
+    } else if (!state && userId == comment.cmtUserId) {
       return (
         <View style={styles.buttonContainer}>
           {/* 수정 버튼 */}
-          <Text style={styles.text}>수정</Text>
+          <Text
+            style={styles.text}
+            onPress={() => {
+              setState(true);
+            }}
+          >
+            수정
+          </Text>
 
           {/* 삭제 버튼 */}
           <Text
@@ -48,7 +118,7 @@ export default function CommentItem({ navigation, comment, userId, download }) {
           <Thumbnail style={styles.thumbnail} source={img} />
         </TouchableOpacity>
 
-        <View style={styles.infoBox}>
+        <View style={styles.commentContainer}>
           {/* 댓글 작성자 이름 */}
           <Text style={styles.authorName}>
             {comment.cmtUsername} ({comment.cmtUserId})
@@ -57,10 +127,7 @@ export default function CommentItem({ navigation, comment, userId, download }) {
           {/* 댓글 작성자 스택 */}
           <Text style={styles.authorStack}>{comment.stack}</Text>
 
-          {/* 댓글 내용 */}
-          <Text style={styles.comment} numberOfLines={3}>
-            {comment.comments}
-          </Text>
+          {showComment()}
         </View>
       </View>
 
@@ -81,8 +148,8 @@ const styles = StyleSheet.create({
     width: ThumbSize,
     height: ThumbSize,
   },
-  infoBox: {
-    marginLeft: 10,
+  commentContainer: {
+    marginHorizontal: 10,
     justifyContent: 'space-around',
   },
   authorName: {
@@ -95,6 +162,12 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   comment: {
+    lineHeight: 27,
+  },
+  editComment: {
+    color: '#777',
+    fontSize: 14,
+    textDecorationLine: 'underline',
     lineHeight: 27,
   },
 
