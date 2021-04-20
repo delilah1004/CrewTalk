@@ -53,9 +53,7 @@ export default function Main({ navigation }) {
   }, [navigation]);
 
   const download = async () => {
-    // const result = await getArticleAll();
     const result = await getArticleByPage(pageNum);
-    console.log(result);
     setArticles(result);
   };
 
@@ -71,65 +69,62 @@ export default function Main({ navigation }) {
 
   return ready ? (
     <Container style={styles.container}>
-      {articles.length == 0 ? (
-        <ActivityIndicator size="large" />
-      ) : (
-        <OptimizedFlatList
-          data={articles}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-          ListHeaderComponent={() => {
-            return (
-              //  {/* 글쓰기 */}
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.push('CreateArticle');
-                }}
-              >
-                <View style={styles.createBox}>
-                  <View style={{ width: '20%' }}>
-                    <FontAwesome
-                      style={{ alignSelf: 'center' }}
-                      name="user-circle-o"
-                      size={ThumbSize}
-                      color="#C7C7C7"
-                    />
-                  </View>
-                  <View style={{ width: '80%' }}>
-                    <Text style={styles.createText}>
-                      함께 나누고 싶은 생각이 있으신가요?
-                    </Text>
-                  </View>
+      <OptimizedFlatList
+        data={articles}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        ListHeaderComponent={() => {
+          return (
+            // 글 쓰기
+            <TouchableOpacity
+              onPress={() => {
+                navigation.push('CreateArticle');
+              }}
+            >
+              <View style={styles.createBox}>
+                <View style={{ width: '20%' }}>
+                  <FontAwesome
+                    style={{ alignSelf: 'center' }}
+                    name="user-circle-o"
+                    size={ThumbSize}
+                    color="#C7C7C7"
+                  />
                 </View>
-              </TouchableOpacity>
-            );
-          }}
-          onEndReachedThreshold={0.1}
-          onEndReached={async () => {
-            let nextArticles = await getArticleByNextPage(pageNum, setPageNum);
-            if (nextArticles != 0) {
-              let allArticles = [...articles, ...nextArticles];
-              await setArticles(allArticles);
-            }
-          }}
-          renderItem={(article, i) => {
-            return (
-              <View>
-                <ArticleCard
-                  navigation={navigation}
-                  article={article.item}
-                  loc={'main'}
-                  userId={userId}
-                  key={i}
-                />
+                <View style={{ width: '80%' }}>
+                  <Text style={styles.createText}>
+                    함께 나누고 싶은 생각이 있으신가요?
+                  </Text>
+                </View>
               </View>
-            );
-          }}
-          numColumns={1}
-          keyExtractor={(item, index) => index.toString()}
-        />
-      )}
+            </TouchableOpacity>
+          );
+        }}
+        onEndReachedThreshold={0.1}
+        onEndReached={async () => {
+          let nextArticles = await getArticleByNextPage(pageNum, setPageNum);
+          if (nextArticles != 0) {
+            let allArticles = [...articles, ...nextArticles];
+            await setArticles(allArticles);
+          }
+        }}
+        renderItem={(article, i) => {
+          return (
+            // 글 목록
+            <View>
+              <ArticleCard
+                navigation={navigation}
+                article={article.item}
+                loc={'main'}
+                userId={userId}
+                key={i}
+              />
+            </View>
+          );
+        }}
+        numColumns={1}
+        keyExtractor={(item, index) => index.toString()}
+      />
     </Container>
   ) : (
     <Loading />
