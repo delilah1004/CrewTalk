@@ -50,7 +50,6 @@ export default function SearchCrew({ navigation }) {
   }, []);
 
   const getCrews = useCallback(async (title) => {
-    console.log(title);
     setSelect(title);
     setPageNum(1);
     let result = [];
@@ -74,6 +73,7 @@ export default function SearchCrew({ navigation }) {
   return ready ? (
     <View style={styles.container}>
       <FlatList
+        contentContainerStyle={{ paddingVertical: 10 }}
         data={crewList}
         initialNumToRender={6}
         maxToRenderPerBatch={1}
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
   searchBar: {
     flexDirection: 'row',
     height: 50,
-    marginTop: 20,
+    marginVertical: 10,
     marginHorizontal: 20,
   },
   input: {
@@ -185,8 +185,9 @@ const styles = StyleSheet.create({
   },
 
   stackSearch: {
+    paddingVertical: 5,
     paddingHorizontal: 10,
-    marginVertical: 20,
+    marginBottom: 5,
   },
 
   itemWrapper: {
