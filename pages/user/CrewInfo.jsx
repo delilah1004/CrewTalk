@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { Container, Text, View, Thumbnail, Button, Header } from 'native-base';
 
@@ -9,6 +9,8 @@ const img = require('../../assets/mask_lion.jpg');
 
 export default function CrewInfo({ navigation, route }) {
   const crew = route.params;
+
+  const [articles, setArticles] = useState([]);
 
   return (
     <Container style={styles.container}>
@@ -33,38 +35,40 @@ export default function CrewInfo({ navigation, route }) {
 
       {/* 프로필 */}
       <View style={styles.profileBox}>
-        {/* 크루원 프로필 사진 */}
-        <Thumbnail large source={img} />
+        {/* 사용자 사진 */}
+        <TouchableOpacity>
+          <Thumbnail source={img} />
+        </TouchableOpacity>
 
-        {/* 크루원 이름 */}
-        <Text style={styles.userName}>{crew.name}</Text>
+        <View style={styles.profileInfo}>
+          {/* 크루원 이름 */}
+          <Text style={styles.crewName}>
+            {crew.name} ({crew.username})
+          </Text>
 
-        {/* 크루원 Stack */}
-        <Text style={styles.userRole}>{crew.stack}</Text>
-
-        {/* 자기소개 */}
-        <Text style={{ fontSize: 14, marginBottom: 20 }}>자기소개입니다.</Text>
+          {/* 크루원 Stack */}
+          <Text style={styles.crewStack}>{crew.stack}</Text>
+        </View>
       </View>
 
       {/* 크루원이 작성한 게시글 */}
-      <ScrollView>
-        {/* 타이틀 */}
-        <View
-          style={{
-            width: '100%',
-            paddingVertical: 15,
-            borderTopColor: '#EEE',
-            borderTopWidth: 1,
-            borderBottomColor: '#CCC',
-            borderBottomWidth: 2,
-          }}
-        >
-          <Text style={styles.headerTitle}>{crew.name}님이 작성한 게시글</Text>
-        </View>
-
-        <View style={styles.postContainer}>
+      {/* 타이틀 */}
+      <View
+        style={{
+          width: '100%',
+          paddingVertical: 15,
+          borderTopColor: '#EEE',
+          borderTopWidth: 1,
+          borderBottomColor: '#CCC',
+          borderBottomWidth: 2,
+        }}
+      >
+        <Text style={styles.headerTitle}>{crew.name}님이 작성한 게시글</Text>
+      </View>
+      {articles.length == 0 ? (
+        <View style={styles.articleContainer}>
           {/* 게시글 아이콘 */}
-          <Image source={none} resizeMode="cover" style={styles.postIcon} />
+          <Image source={none} resizeMode="cover" style={styles.articleIcon} />
 
           {/* 게시글 없을 때 멘트 */}
           <Text style={{ textAlign: 'center' }}>
@@ -81,7 +85,42 @@ export default function CrewInfo({ navigation, route }) {
             <Text style={styles.addFirstPostText}>첫게시물 작성하기</Text>
           </TouchableOpacity>
         </View>
-      </ScrollView>
+      ) : (
+        <FlatList
+          data={articles}
+          initialNumToRender={5}
+          maxToRenderPerBatch={1}
+          refreshing={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+          showsVerticalScrollIndicator={false}
+          onEndReachedThreshold={0.1}
+          onEndReached={async () => {
+            let nextArticles = await getCrewArticlesByPage(pageNum + 1);
+            setPageNum(pageNum + 1);
+            if (nextArticles.length != 0) {
+              let allArticles = [...articles, ...nextArticles];
+              setArticles(allArticles);
+            }
+          }}
+          renderItem={(article, i) => {
+            return (
+              // 글 목록
+              <View>
+                <ArticleCard
+                  navigation={navigation}
+                  article={article.item}
+                  loc={'main'}
+                  userId={user.username}
+                  key={i}
+                />
+              </View>
+            );
+          }}
+          numColumns={1}
+          keyExtractor={(item, index) => index.toString()}
+        />
+      )}
     </Container>
   );
 }
@@ -91,6 +130,32 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
+  // 프로필 영역
+  profileBox: {
+    backgroundColor: '#FFF',
+    flexDirection: 'row',
+    padding: 20,
+    alignItems: 'center',
+  },
+  // 프로필 정보 영역
+  profileInfo: {
+    paddingStart: 20,
+    justifyContent: 'center',
+  },
+  // 크루원 이름
+  crewName: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginVertical: 5,
+  },
+  // 크루원 스택
+  crewStack: {
+    color: '#999',
+    fontSize: 14,
+    marginBottom: 5,
+  },
+
+  // 크루원 게시글 헤더
   header: {
     backgroundColor: '#FFF',
     borderBottomWidth: 1.5,
@@ -104,74 +169,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
-  // 프로필 영역
-  profileBox: {
-    marginTop: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  // 사용자 이름
-  userName: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginVertical: 10,
-  },
-  // 사용자 직함
-  userRole: {
-    color: '#999',
-    fontSize: 14,
-    marginVertical: 5,
-  },
-  // flexDirection -> row
-  flexRow: {
-    flexDirection: 'row',
-  },
-  followBox: {
-    flexDirection: 'row',
-    marginVertical: 30,
-    alignItems: 'center',
-  },
-  // Follow Text
-  followText: {
-    fontSize: 15,
-  },
-  // Follow Number Text
-  followNumberText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginLeft: 10,
-  },
-
-  // 팔로우 버튼
-  button: {
-    width: '90%',
-    padding: 5,
-    backgroundColor: '#FFEDEE',
-    borderRadius: 5,
-    alignSelf: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    color: '#EB6552',
-    fontSize: 14,
-    padding: 3,
-  },
-
-  // Tab Bar
-  tabBaractiveText: { color: 'black', fontWeight: '600' },
-  tabBarText: { color: '#DBDBDB' },
-  tabBarBackground: { backgroundColor: '#FFF' },
-
-  // post 영역
-  postContainer: {
+  articleContainer: {
+    backgroundColor: '#FFF',
     flex: 1,
-    // height: WindowHeight,
-    padding: 20,
+    justifyContent: 'center',
   },
 
   // 게시글 아이콘
-  postIcon: {
+  articleIcon: {
     width: 100,
     height: 100,
     marginVertical: 20,
