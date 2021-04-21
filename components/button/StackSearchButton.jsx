@@ -2,12 +2,7 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Text } from 'native-base';
 
-export default function StackSearchButton({
-  title,
-  setSelect,
-  select,
-  doFunction,
-}) {
+export default function StackSearchButton({ title, select, doFunction }) {
   if (title == select) {
     return (
       <TouchableOpacity style={[styles.box, styles.activeBox]}>
@@ -19,7 +14,6 @@ export default function StackSearchButton({
       <TouchableOpacity
         style={[styles.box, styles.defaultBox]}
         onPress={() => {
-          setSelect(title);
           doFunction(title);
         }}
       >

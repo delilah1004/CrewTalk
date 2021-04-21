@@ -104,11 +104,14 @@ export async function getUserInfo() {
   }
 }
 
-export async function getCrewList() {
+export async function getCrewsByPage(pageNum) {
   try {
     const response = await axios({
       method: 'get',
       url: host + '/api/user/all',
+      params: {
+        page: pageNum,
+      },
     });
 
     return response.data;
@@ -119,13 +122,14 @@ export async function getCrewList() {
   }
 }
 
-export async function getCrewListByStack(stack) {
+export async function getCrewsByStackByPage(stack, pageNum) {
   try {
     const response = await axios({
       method: 'get',
       url: host + '/api/user',
       params: {
         stack: stack,
+        page: pageNum,
       },
     });
 
