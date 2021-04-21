@@ -7,20 +7,17 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  FlatList,
 } from 'react-native';
 import { Container } from 'native-base';
 
-import { OptimizedFlatList } from 'react-native-optimized-flatlist';
 import { FontAwesome } from '@expo/vector-icons';
 
 import Loading from '../../pages/Loading';
 
 import ArticleCard from '../../components/card/ArticleCard';
 
-import {
-  getArticleByPage,
-  getArticleByNextPage,
-} from '../../config/ArticleAPI';
+import { getArticleByPage } from '../../config/ArticleAPI';
 import { getUserInfo } from '../../config/UserAPI';
 
 const WindowWidth = Dimensions.get('window').width;
@@ -32,9 +29,9 @@ const wait = (timeout) => {
 
 export default function Main({ navigation }) {
   const [ready, setReady] = useState(false);
-  const [articles, setArticles] = useState([]);
-
   const [refreshing, setRefreshing] = useState(false);
+
+  const [articles, setArticles] = useState([]);
 
   const [userId, setUserId] = useState('');
   const [pageNum, setPageNum] = useState(1);
@@ -69,7 +66,7 @@ export default function Main({ navigation }) {
 
   return ready ? (
     <Container style={styles.container}>
-      <OptimizedFlatList
+      <FlatList
         data={articles}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -102,7 +99,8 @@ export default function Main({ navigation }) {
         }}
         onEndReachedThreshold={0.1}
         onEndReached={async () => {
-          let nextArticles = await getArticleByNextPage(pageNum, setPageNum);
+          let nextArticles = await getArticleByPage(pageNum + 1);
+          setPageNum(pageNum + 1);
           if (nextArticles != 0) {
             let allArticles = [...articles, ...nextArticles];
             await setArticles(allArticles);
