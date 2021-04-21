@@ -74,7 +74,7 @@ export default function Mypage({ navigation }) {
       <View style={styles.profileBox}>
         {/* 사용자 사진 */}
         <TouchableOpacity>
-          <Thumbnail style={styles.thumbnail} source={img} />
+          <Thumbnail source={img} />
         </TouchableOpacity>
 
         <View style={styles.profileInfo}>
@@ -104,15 +104,9 @@ export default function Mypage({ navigation }) {
       </View>
 
       {articles.length == 0 ? (
-        <View
-          style={{
-            backgroundColor: '#FFF',
-            flex: 1,
-            justifyContent: 'center',
-          }}
-        >
+        <View style={styles.articleContainer}>
           {/* 게시글 아이콘 */}
-          <Image source={none} resizeMode="cover" style={styles.postIcon} />
+          <Image source={none} resizeMode="cover" style={styles.articleIcon} />
           {/* 게시글 없을 때 멘트 */}
           <Text style={{ textAlign: 'center' }}>
             아직 업로드한 게시글이 없습니다.
@@ -173,18 +167,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  header: {
-    backgroundColor: '#FFF',
-    borderBottomWidth: 1.5,
-    borderBottomColor: '#EEE',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  headerTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
 
   // 프로필 영역
   profileBox: {
@@ -211,8 +193,28 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
 
+  // 사용자 게시글 헤더
+  header: {
+    backgroundColor: '#FFF',
+    borderBottomWidth: 1.5,
+    borderBottomColor: '#EEE',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  headerTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+
+  articleContainer: {
+    backgroundColor: '#FFF',
+    flex: 1,
+    justifyContent: 'center',
+  },
+
   // 게시글 아이콘
-  postIcon: {
+  articleIcon: {
     width: 100,
     height: 100,
     marginVertical: 20,
