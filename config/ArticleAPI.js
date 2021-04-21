@@ -63,23 +63,6 @@ export async function getArticleByPage(pageNum) {
   }
 }
 
-export async function getArticleByNextPage(pageNum, setPageNum) {
-  try {
-    let articles = await getArticleByPage(pageNum);
-
-    if (articles.length !== 0) {
-      setPageNum(pageNum + 1);
-      return articles;
-    } else {
-      return 0;
-    }
-  } catch (err) {
-    const error = err.response.data.err || err.message;
-
-    Alert.alert(error);
-  }
-}
-
 // 완료
 export async function readArticle(navigation, title, contents) {
   try {

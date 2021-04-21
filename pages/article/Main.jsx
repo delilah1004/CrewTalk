@@ -68,9 +68,11 @@ export default function Main({ navigation }) {
     <Container style={styles.container}>
       <FlatList
         data={articles}
+        initialNumToRender={5}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
+        showsVerticalScrollIndicator={false}
         ListHeaderComponent={() => {
           return (
             // 글 쓰기
@@ -101,7 +103,7 @@ export default function Main({ navigation }) {
         onEndReached={async () => {
           let nextArticles = await getArticleByPage(pageNum + 1);
           setPageNum(pageNum + 1);
-          if (nextArticles != 0) {
+          if (nextArticles.length != 0) {
             let allArticles = [...articles, ...nextArticles];
             await setArticles(allArticles);
           }
