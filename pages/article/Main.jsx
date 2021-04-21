@@ -111,15 +111,13 @@ export default function Main({ navigation }) {
         renderItem={(article, i) => {
           return (
             // 글 목록
-            <View>
-              <ArticleCard
-                navigation={navigation}
-                article={article.item}
-                loc={'main'}
-                userId={userId}
-                key={i}
-              />
-            </View>
+            <ArticleCard
+              navigation={navigation}
+              article={article.item}
+              loc={'main'}
+              userId={userId}
+              key={i}
+            />
           );
         }}
         numColumns={1}
