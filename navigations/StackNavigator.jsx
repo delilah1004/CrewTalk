@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import TabNavigator from './TabNavigator';
 
-import { SignIn, SignUp, Setting } from '../pages/user';
+import { SignIn, SignUp, Setting, CrewInfo } from '../pages/user';
 import {
   Main,
   ReadArticle,
@@ -31,6 +31,8 @@ const StackNavigator = () => {
       <Stack.Screen name="CreateArticle" component={CreateArticle} />
       <Stack.Screen name="SearchArticle" component={SearchArticle} />
       <Stack.Screen name="UpdateArticle" component={UpdateArticle} />
+
+      <Stack.Screen name="CrewInfo" component={CrewInfo} />
 
       <Stack.Screen name="Setting" component={Setting} />
     </Stack.Navigator>

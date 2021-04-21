@@ -12,7 +12,7 @@ export default function CrewCard({ navigation, crew }) {
     <TouchableOpacity
       style={styles.cardContainer}
       onPress={() => {
-        navigation.push('CrewInfo', crew.username);
+        navigation.push('CrewInfo', crew);
       }}
     >
       <View style={styles.card}>
