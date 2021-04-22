@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
-import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
-import { Container, Footer, Input, Text, View } from 'native-base';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Container, Footer, Input, Text } from 'native-base';
 
 import Loading from '../../pages/Loading';
+
 import ArticleCard from '../../components/card/ArticleCard';
 import { CommentItem } from '../../components/item';
 
@@ -15,6 +16,7 @@ export default function ReadArticle({ navigation, route }) {
   const [ready, setReady] = useState(false);
   const [comments, setComments] = useState([]);
   const [currentComment, setCurrentComment] = useState('');
+  const [viewRef, setViewRef] = useState(null);
 
   useEffect(() => {
     navigation.addListener('focus', (e) => {
@@ -30,10 +32,13 @@ export default function ReadArticle({ navigation, route }) {
 
   const commentUpload = async () => {
     const result = await createComment(data.article.id, currentComment);
-    if (result) {
-      setCurrentComment('');
-      download();
-    }
+    setCurrentComment('');
+    setComments(result);
+    await scrollBottom();
+  };
+
+  const scrollBottom = async () => {
+    await viewRef.scrollToEnd({ animated: true, duration: 500 });
   };
 
   const showButton = () => {
@@ -59,7 +64,11 @@ export default function ReadArticle({ navigation, route }) {
 
   return ready ? (
     <Container style={styles.container}>
-      <ScrollView>
+      <ScrollView
+        ref={(ref) => {
+          setViewRef(ref);
+        }}
+      >
         {/* 게시글 상세 */}
         <ArticleCard
           navigation={navigation}
@@ -67,7 +76,6 @@ export default function ReadArticle({ navigation, route }) {
           loc={'detail'}
           userId={data.userId}
         />
-
         {/* 댓글 목록 */}
         <View>
           {comments.map((comment, i) => {

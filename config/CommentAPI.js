@@ -21,8 +21,10 @@ export async function createComment(articleId, comment) {
       },
     });
 
+    const result = await getComments(articleId);
     Alert.alert('댓글 작성 완료!');
-    return true;
+
+    return result;
   } catch (err) {
     const error = err.response.data.err || err.message;
 
