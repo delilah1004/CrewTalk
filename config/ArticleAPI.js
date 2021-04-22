@@ -104,6 +104,29 @@ export async function getMyArticlesByPage(pageNum) {
   }
 }
 
+export async function getCrewArticlesByPage(crewId, pageNum) {
+  try {
+    const token = await AsyncStorage.getItem('session');
+    const response = await axios({
+      method: 'get',
+      url: host + '/article/authorId',
+      headers: {
+        Authorization: token,
+      },
+      params: {
+        authorId: crewId,
+        page: pageNum,
+      },
+    });
+
+    return response.data;
+  } catch (err) {
+    const error = err.response.data.err || err.message;
+
+    Alert.alert(error);
+  }
+}
+
 // 완료
 export async function readArticle(navigation, title, contents) {
   try {

@@ -1,8 +1,20 @@
-import React, { useState } from 'react';
-import { StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import {
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  FlatList,
+  RefreshControl,
+} from 'react-native';
 import { Container, Text, View, Thumbnail, Button, Header } from 'native-base';
 
 import { Ionicons } from '@expo/vector-icons';
+
+import Loading from '../Loading';
+
+import ArticleCard from '../../components/card/ArticleCard';
+
+import { getCrewArticlesByPage } from '../../config/ArticleAPI';
 
 const none = require('../../assets/none.png');
 const img = require('../../assets/mask_lion.jpg');
@@ -10,9 +22,32 @@ const img = require('../../assets/mask_lion.jpg');
 export default function CrewInfo({ navigation, route }) {
   const crew = route.params;
 
+  const [ready, setReady] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const [pageNum, setPageNum] = useState(1);
   const [articles, setArticles] = useState([]);
 
-  return (
+  useEffect(() => {
+    navigation.addListener('focus', (e) => {
+      setTimeout(() => {
+        download();
+      });
+    });
+    setReady(true);
+  }, []);
+
+  const download = async () => {
+    const results = await getCrewArticlesByPage(crew.username, pageNum);
+    setArticles(results);
+  };
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    wait(1000).then(() => setRefreshing(false));
+  }, []);
+
+  return ready ? (
     <Container style={styles.container}>
       {/* 헤더 */}
       <Header style={styles.header} transparent>
@@ -96,7 +131,10 @@ export default function CrewInfo({ navigation, route }) {
           showsVerticalScrollIndicator={false}
           onEndReachedThreshold={0.1}
           onEndReached={async () => {
-            let nextArticles = await getCrewArticlesByPage(pageNum + 1);
+            let nextArticles = await getCrewArticlesByPage(
+              crew.username,
+              pageNum + 1
+            );
             setPageNum(pageNum + 1);
             if (nextArticles.length != 0) {
               let allArticles = [...articles, ...nextArticles];
@@ -111,7 +149,7 @@ export default function CrewInfo({ navigation, route }) {
                   navigation={navigation}
                   article={article.item}
                   loc={'main'}
-                  userId={user.username}
+                  userId={crew.username}
                   key={i}
                 />
               </View>
@@ -122,6 +160,8 @@ export default function CrewInfo({ navigation, route }) {
         />
       )}
     </Container>
+  ) : (
+    <Loading />
   );
 }
 
@@ -148,11 +188,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginVertical: 5,
   },
-  // 크루원 스택
+  // 크루원 Stack
   crewStack: {
     color: '#999',
     fontSize: 14,
-    marginBottom: 5,
+    marginVertical: 5,
   },
 
   // 크루원 게시글 헤더
