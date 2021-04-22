@@ -9,9 +9,9 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import { Container } from 'native-base';
+import { Container, Button } from 'native-base';
 
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome, AntDesign } from '@expo/vector-icons';
 
 import Loading from '../../pages/Loading';
 
@@ -28,6 +28,8 @@ const wait = (timeout) => {
 };
 
 export default function Main({ navigation }) {
+  let flatListRef;
+
   const [ready, setReady] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -64,9 +66,16 @@ export default function Main({ navigation }) {
     wait(1000).then(() => setRefreshing(false));
   }, []);
 
+  const scrollTop = () => {
+    flatListRef.scrollToOffset({ offset: 0, animated: true });
+  };
+
   return ready ? (
     <Container style={styles.container}>
       <FlatList
+        ref={(ref) => {
+          flatListRef = ref;
+        }}
         data={articles}
         initialNumToRender={5}
         refreshControl={
@@ -123,6 +132,15 @@ export default function Main({ navigation }) {
         numColumns={1}
         keyExtractor={(item, index) => index.toString()}
       />
+
+      <Button
+        style={styles.FAB}
+        onPress={() => {
+          scrollTop();
+        }}
+      >
+        <AntDesign name="arrowup" size={26} color="black" />
+      </Button>
     </Container>
   ) : (
     <Loading />
@@ -151,5 +169,17 @@ const styles = StyleSheet.create({
     fontSize: 15,
     padding: 18,
     borderRadius: 5,
+  },
+
+  FAB: {
+    backgroundColor: '#FFF',
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

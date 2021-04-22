@@ -7,6 +7,9 @@ import {
   ScrollView,
   FlatList,
 } from 'react-native';
+import { Button } from 'native-base';
+
+import { AntDesign } from '@expo/vector-icons';
 
 import Loading from '../Loading';
 
@@ -26,7 +29,9 @@ const wait = (timeout) => {
 };
 
 export default function SearchArticle({ navigation }) {
+  let flatListRef;
   const stacks = stackList.stack;
+
   const [ready, setReady] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -70,9 +75,16 @@ export default function SearchArticle({ navigation }) {
     wait(1000).then(() => setRefreshing(false));
   }, []);
 
+  const scrollTop = () => {
+    flatListRef.scrollToOffset({ offset: 0, animated: true });
+  };
+
   return ready ? (
     <View style={styles.container}>
       <FlatList
+        ref={(ref) => {
+          flatListRef = ref;
+        }}
         data={articles}
         initialNumToRender={5}
         refreshing={
@@ -135,6 +147,14 @@ export default function SearchArticle({ navigation }) {
         numColumns={1}
         keyExtractor={(item, index) => index.toString()}
       />
+      <Button
+        style={styles.FAB}
+        onPress={() => {
+          scrollTop();
+        }}
+      >
+        <AntDesign name="arrowup" size={26} color="black" />
+      </Button>
     </View>
   ) : (
     <Loading />
@@ -154,5 +174,17 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
     paddingHorizontal: 10,
     marginBottom: 5,
+  },
+
+  FAB: {
+    backgroundColor: '#FFF',
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

@@ -9,9 +9,9 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import { Input } from 'native-base';
+import { Button, Input } from 'native-base';
 
-import { Ionicons } from '@expo/vector-icons';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
 
 import Loading from '../Loading';
 
@@ -28,7 +28,9 @@ const wait = (timeout) => {
 };
 
 export default function SearchCrew({ navigation }) {
+  let flatListRef;
   const stacks = stackList.stack;
+
   const [ready, setReady] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -70,9 +72,16 @@ export default function SearchCrew({ navigation }) {
     wait(1000).then(() => setRefreshing(false));
   }, []);
 
+  const scrollTop = () => {
+    flatListRef.scrollToOffset({ offset: 0, animated: true });
+  };
+
   return ready ? (
     <View style={styles.container}>
       <FlatList
+        ref={(ref) => {
+          flatListRef = ref;
+        }}
         contentContainerStyle={{ paddingVertical: 10 }}
         data={crewList}
         initialNumToRender={6}
@@ -147,6 +156,14 @@ export default function SearchCrew({ navigation }) {
         columnWrapperStyle={styles.itemWrapper}
         keyExtractor={(item, index) => index.toString()}
       />
+      <Button
+        style={styles.FAB}
+        onPress={() => {
+          scrollTop();
+        }}
+      >
+        <AntDesign name="arrowup" size={26} color="black" />
+      </Button>
     </View>
   ) : (
     <Loading />
@@ -192,5 +209,17 @@ const styles = StyleSheet.create({
 
   itemWrapper: {
     paddingHorizontal: (WindowWidth * 0.05) / 2,
+  },
+
+  FAB: {
+    backgroundColor: '#FFF',
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
