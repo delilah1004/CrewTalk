@@ -2,7 +2,12 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import Platform from 'react-native';
-import { Foundation, Ionicons, FontAwesome } from '@expo/vector-icons';
+import {
+  AntDesign,
+  Foundation,
+  Ionicons,
+  FontAwesome,
+} from '@expo/vector-icons';
 
 import { Main, SearchArticle } from '../pages/article';
 import { SearchCrew, MyPage } from '../pages/user';
@@ -20,12 +25,12 @@ const TabNavigator = () => {
           if (route.name === 'Main') {
             iconKind = 'Foundation';
             iconName = 'home';
-          } else if (
-            route.name === 'SearchArticle' ||
-            route.name === 'SearchCrew'
-          ) {
+          } else if (route.name === 'SearchArticle') {
+            iconKind = 'AntDesign';
+            iconName = 'profile';
+          } else if (route.name === 'SearchCrew') {
             iconKind = 'Ionicons';
-            iconName += 'search-sharp';
+            iconName += 'people-outline';
           } else if (route.name === 'MyPage') {
             iconKind = 'FontAwesome';
             iconName = 'user-circle-o';
@@ -42,6 +47,14 @@ const TabNavigator = () => {
           } else if (iconKind === 'Ionicons') {
             return (
               <Ionicons
+                name={iconName}
+                color={focused ? '#ED6653' : '#777'}
+                size={24}
+              />
+            );
+          } else if (iconKind === 'AntDesign') {
+            return (
+              <AntDesign
                 name={iconName}
                 color={focused ? '#ED6653' : '#777'}
                 size={24}
