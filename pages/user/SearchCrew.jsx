@@ -78,6 +78,21 @@ export default function SearchCrew({ navigation }) {
 
   return ready ? (
     <View style={styles.container}>
+      {/* 검색창 */}
+      <View style={styles.searchBar}>
+        <Input
+          style={styles.input}
+          placeholder={'이름으로 검색해보세요.'}
+          placeholderTextColor="#AAA"
+          onChangeText={(text) => {
+            setName(text);
+          }}
+        />
+        <TouchableOpacity style={styles.button} onPress={search}>
+          <Ionicons name="search-outline" size={22} color="white" />
+        </TouchableOpacity>
+      </View>
+
       <FlatList
         ref={(ref) => {
           flatListRef = ref;
@@ -85,53 +100,35 @@ export default function SearchCrew({ navigation }) {
         contentContainerStyle={{ paddingVertical: 10 }}
         data={crewList}
         initialNumToRender={6}
-        maxToRenderPerBatch={1}
         refreshing={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={() => {
           return (
-            <View>
-              {/* 검색창 */}
-              <View style={styles.searchBar}>
-                <Input
-                  style={styles.input}
-                  placeholder={'이름으로 검색해보세요.'}
-                  placeholderTextColor="#AAA"
-                  onChangeText={(text) => {
-                    setName(text);
-                  }}
-                />
-                <TouchableOpacity style={styles.button} onPress={search}>
-                  <Ionicons name="search-outline" size={22} color="white" />
-                </TouchableOpacity>
-              </View>
-
-              {/* Stack 분류 */}
-              <ScrollView
-                contentContainerStyle={styles.stackSearch}
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
+            // Stack 분류
+            <ScrollView
+              contentContainerStyle={styles.stackSearch}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+            >
+              <View
+                style={{
+                  flexDirection: 'row',
+                }}
               >
-                <View
-                  style={{
-                    flexDirection: 'row',
-                  }}
-                >
-                  {stacks.map((title, i) => {
-                    return (
-                      <StackSearchButton
-                        title={title}
-                        select={select}
-                        doFunction={getCrews}
-                        key={i}
-                      />
-                    );
-                  })}
-                </View>
-              </ScrollView>
-            </View>
+                {stacks.map((title, i) => {
+                  return (
+                    <StackSearchButton
+                      title={title}
+                      select={select}
+                      doFunction={getCrews}
+                      key={i}
+                    />
+                  );
+                })}
+              </View>
+            </ScrollView>
           );
         }}
         onEndReachedThreshold={0.1}
@@ -180,7 +177,8 @@ const styles = StyleSheet.create({
   searchBar: {
     flexDirection: 'row',
     height: 50,
-    marginVertical: 10,
+    marginTop: 20,
+    marginBottom: 5,
     marginHorizontal: 20,
   },
   input: {
@@ -202,9 +200,8 @@ const styles = StyleSheet.create({
   },
 
   stackSearch: {
-    paddingVertical: 5,
     paddingHorizontal: 10,
-    marginBottom: 5,
+    marginBottom: 10,
   },
 
   itemWrapper: {

@@ -75,7 +75,7 @@ export async function logout(navigation) {
   try {
     await AsyncStorage.clear();
 
-    await Alert.alert('로그아웃!');
+    Alert.alert('로그아웃!');
     navigation.push('SignIn');
   } catch (err) {
     const error = err.response.data.message || err.message;
@@ -117,6 +117,25 @@ export async function getCrewsByPage(pageNum) {
     return response.data;
   } catch (err) {
     const error = err.response.data.message || err.message;
+
+    Alert.alert(error);
+  }
+}
+
+export async function getCrewsByNameByPage(name, pageNum) {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: host + '/api/user/search',
+      params: {
+        name: name,
+        page: pageNum,
+      },
+    });
+
+    return response.data;
+  } catch (err) {
+    const error = err.response.data.err || err.message;
 
     Alert.alert(error);
   }
