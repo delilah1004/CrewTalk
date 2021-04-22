@@ -101,14 +101,16 @@ export default function SignUp({ navigation }) {
             <Text style={styles.label}>주특기</Text>
             <View style={styles.boxContainer}>
               {stacks.map((title, i) => {
-                return (
-                  <StackSelectButton
-                    title={title}
-                    setStack={setStack}
-                    currentStack={stack}
-                    key={i}
-                  />
-                );
+                if (i != 0) {
+                  return (
+                    <StackSelectButton
+                      title={title}
+                      setStack={setStack}
+                      currentStack={stack}
+                      key={i}
+                    />
+                  );
+                }
               })}
             </View>
           </View>
